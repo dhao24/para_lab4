@@ -15,7 +15,8 @@ public:
 
 	bool isSolved();
 	bool isAllowed(char val, int x, int y);
-	bool solveBackTrack();
+	bool solveBackTrack(int* sum);
+	int solveBackTrack_all();
 
 	void set(char val, int x, int y);
 
