@@ -1,6 +1,4 @@
 #include "Solver.h"
-#include <mpi.h>
-
 
 Solver::Solver()
 {
@@ -89,11 +87,14 @@ bool Solver::isAllowed(char val, int x, int y)
 	return allowed;
 }
 
-bool Solver::solveBackTrack()
+bool Solver::solveBackTrack(int* sum)
 {
 	// Are we there yet?
 	if (isSolved())
 	{
+		*sum+=1;
+		std::cout<<"["<<*sum<<"]"<<std::endl;
+		this->print(std::cout);
 		return true;
 	}
 
@@ -106,6 +107,7 @@ bool Solver::solveBackTrack()
 			if (data[y][x] == 0)
 			{
 				// Find an appropriate 'val'
+				int success_flag=0;
 				for (int n = 1; n <= 9; ++n)
 				{
 					// Is 'val' allowed in this cell?
@@ -116,14 +118,19 @@ bool Solver::solveBackTrack()
 						// Put 'val' into the cell
 						tmpSolver.set(n, x, y);
 						// Try to solve the new table
-						if (tmpSolver.solveBackTrack())
+						if (tmpSolver.solveBackTrack(sum))
 						{
 							// Solution
-							*this = tmpSolver;
-							return true;
+							// *this = tmpSolver;
+							success_flag+=1;
 						}
 					}
 				}
+				if (success_flag)
+				{
+					return true;
+				}
+				
 			}
 			// Cannot solve this table, back track to a previous state
 			if (data[y][x] == 0) return false;
