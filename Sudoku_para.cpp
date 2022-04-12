@@ -23,11 +23,11 @@ int main(int argc, char* argv[])
 		std::cout << std::endl << "-----------------------------------------" << std::endl;
 	// }
 	
-	std::cout << "Solution:" << std::endl << std::endl;;
-	int sum=0;
-	solver.solveBackTrack(&sum);
-	// solver.print(std::cout);
-	std::cout<<"Number of solutions are "<<sum<<std::endl;
+		std::cout << "Solution:" << std::endl << std::endl;;
+		int sum=0;
+		solver.solveBackTrack(&sum);
+		// solver.print(std::cout);
+		std::cout<<"Number of solutions are "<<sum<<std::endl;
 	}
 	MPI_Finalize();
     return 0;
