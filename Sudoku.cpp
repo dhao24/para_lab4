@@ -7,13 +7,16 @@
 int main()
 {
 	// Minimal Soduku tables with 17 elements: http://staffhome.ecm.uwa.edu.au/~00013890/sudokumin.php
-	Solver solver("000801000000000043500000000000070800020030000000000100600000075003400000000200600");
+	// Solver solver("000801000000000043500000000000070800020030000000000100600000075003400000000200600");
+	Solver solver("906070403000400200070023010500000100040208060003000005030700050007005000405010708");
 	std::cout << "Problem:" << std::endl << std::endl;
 	solver.print(std::cout);
 	std::cout << std::endl << "-----------------------------------------" << std::endl;
 	std::cout << "Solution:" << std::endl << std::endl;;
-	solver.solveBackTrack();
-	solver.print(std::cout);
+	int sum=0;
+	solver.solveBackTrack(&sum);
+	// solver.print(std::cout);
+	std::cout<<"Number of solutions are "<<sum<<std::endl;
     return 0;
 }
 

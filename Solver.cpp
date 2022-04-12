@@ -89,11 +89,14 @@ bool Solver::isAllowed(char val, int x, int y)
 	return allowed;
 }
 
-bool Solver::solveBackTrack()
+bool Solver::solveBackTrack(int* sum)
 {
 	// Are we there yet?
 	if (isSolved())
 	{
+		*sum+=1;
+		std::cout<<"["<<*sum<<"]"<<std::endl;
+		this->print(std::cout);
 		return true;
 	}
 
@@ -106,6 +109,7 @@ bool Solver::solveBackTrack()
 			if (data[y][x] == 0)
 			{
 				// Find an appropriate 'val'
+				int success_flag=0;
 				for (int n = 1; n <= 9; ++n)
 				{
 					// Is 'val' allowed in this cell?
@@ -116,14 +120,19 @@ bool Solver::solveBackTrack()
 						// Put 'val' into the cell
 						tmpSolver.set(n, x, y);
 						// Try to solve the new table
-						if (tmpSolver.solveBackTrack())
+						if (tmpSolver.solveBackTrack(sum))
 						{
 							// Solution
-							*this = tmpSolver;
-							return true;
+							// *this = tmpSolver;
+							success_flag+=1;
 						}
 					}
 				}
+				if (success_flag)
+				{
+					return true;
+				}
+				
 			}
 			// Cannot solve this table, back track to a previous state
 			if (data[y][x] == 0) return false;
@@ -132,6 +141,53 @@ bool Solver::solveBackTrack()
 
 	return false;
 }
+
+// int Solver::solveBackTrack_all()
+// {
+// 	// Are we there yet?
+// 	if (isSolved())
+// 	{
+// 		return 0;
+// 	}
+
+// 	int result_num=0;
+// 	int run=0;
+
+// 	// Find an empty cell
+// 	for (int y = 0; y < 9; ++y)
+// 	{
+// 		for (int x = 0; x < 9; ++x)
+// 		{
+// 			// Is it empty?
+// 			run+=1;
+// 			if (data[y][x] == 0)
+// 			{
+// 				// Find an appropriate 'val'
+// 				for (int n = 1; n <= 9; ++n)
+// 				{
+// 					// Is 'val' allowed in this cell?
+// 					if (isAllowed(n, x, y))
+// 					{
+// 						// Copy the table
+// 						Solver tmpSolver(this);
+// 						// Put 'val' into the cell
+// 						tmpSolver.set(n, x, y);
+// 						// Try to solve the new table
+// 						if (tmpSolver.solveBackTrack(sum))
+// 						{
+// 							// Solution
+// 							*this = tmpSolver;
+// 							result_num+=1;
+// 						}
+// 					}
+// 				}
+// 			}
+// 			// Cannot solve this table, back track to a previous state
+// 			if (data[y][x] == 0) return -1;
+// 		}
+// 	}	
+// 	return result_num+run;
+// }
 
 void Solver::set(char val, int x, int y)
 {
