@@ -1,9 +1,11 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 
 #define sudoku_N 9
 #define sudoku_n 3
+#define serial_level 3
 
 /*force the bool value to zero
 map: bool array
@@ -27,11 +29,17 @@ public:
 	bool solveBackTrack(int* sum);
 	bool isValid();
 	int solveBackTrack_all();
-	int getNumOfZero();
+	
+	int getNumOfZero(int* x, int* y);
 
+	void getAllData(char* pdata);
+
+	bool findNextValid(char* ndata, int* nNum);
 	void set(char val, int x, int y);
 
 private:
-	char data[9][9];
+	char data[sudoku_N][sudoku_N];
 };
+
+bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum);
 

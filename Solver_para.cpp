@@ -93,6 +93,31 @@ bool Solver::isAllowed(char val, int x, int y)
 	return allowed;
 }
 
+/* return the number of zeros left in the table
+	(x,y) get the location of the first remaining zero of the table
+	*/
+int Solver::getNumOfZero(int* x, int* y){
+	int num=0;
+	for (int i = 0; i < sudoku_N; i++)
+	{
+		for (int j = 0; j < sudoku_N; j++)
+		{
+			if (data[i][j]==0)
+			{
+				if (num==0)
+				{
+					*x=i;
+					*y=j;
+				}
+				
+				num+=1;
+			}
+		}
+	}
+	return num;
+}
+
+/*this function used to check if the current table is valid*/ 
 bool Solver::isValid()
 {
 	bool seen[sudoku_N];
@@ -210,8 +235,65 @@ bool Solver::solveBackTrack(int* sum)
 	return false;
 }
 
+/* this function will find all valid tables of the next zero element
+return true if there is a next zero
+pdata: store the valid tables
+totalNum: return the number of valid tables, always no bigger than 9 if 9*9 table
+*/
+bool Solver::findNextValid(char* ndata, int* totalNum){
+	int x=0,y=0,num=0;
+	if(getNumOfZero(&x,&y)){
+		for (int i = 1; i <= sudoku_N; i++)
+		{
+			if (isAllowed(i,x,y))
+			{
+				*(ndata+num*sudoku_N*sudoku_N+x*sudoku_N+y)=i+'0';
+				getAllData(ndata+num*sudoku_N*sudoku_N);
+				num+=1;
+			}
+		}
+	}else{
+		return false;
+	}
+
+	*totalNum=num;
+	return true;
+}
+
 void Solver::set(char val, int x, int y)
 {
 	data[y][x] = val;
 }
 
+void Solver::getAllData(char* pdata)
+{
+	for (int i = 0; i < sudoku_N*sudoku_N; i++)
+	{
+		int x = i % sudoku_N;
+		int y = i / sudoku_N;
+		*(pdata+i)=data[y][i]+'0';
+	}
+}
+
+/* from the pdata status find the next valid
+return false if no valid elements can be found
+pdata: previous array of tables
+pNum: number of previous tables
+ndata: next array of tables
+pNum: number of next tables
+*/
+bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
+	int total_num=0;
+	bool rtflag=false;
+	for (int i = 0; i < pNum; i++)
+	{
+		int num=0;
+		Solver solver(pdata+i*sudoku_N*sudoku_N);
+		if (solver.findNextValid(ndata+i*sudoku_N*sudoku_N, &num)){
+			total_num+=num;
+			rtflag=true;
+		}
+	}
+	*nNum=total_num;
+	return rtflag;
+}
