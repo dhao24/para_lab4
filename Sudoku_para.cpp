@@ -46,6 +46,19 @@ int main(int argc, char* argv[])
 		resultNum=pNum;
 	}
 
+	int sum=0;
+	int index=my_rank;
+	while (index<resultNum)
+	{
+		//todo
+		int caseSum=0;
+		Solver tempSolver(resultData+index);
+		tempSolver.solveBackTrack(&caseSum);
+
+		index=my_rank+size;
+		sum+=caseSum;
+	}
+
 	if (my_rank==RootRank)
 	{
 		std::cout << "Problem:" << std::endl << std::endl;
@@ -54,10 +67,10 @@ int main(int argc, char* argv[])
 	// }
 	
 		std::cout << "Solution:" << std::endl << std::endl;;
-		int sum=0;
-		solver.solveBackTrack(&sum);
+		// int sum=0;
+		// solver.solveBackTrack(&sum);
 		// solver.print(std::cout);
-		std::cout<<"Number of solutions are "<<sum<<std::endl;
+		// std::cout<<"Number of solutions are "<<sum<<std::endl;
 
 		// Test print
 		std::cout<<"Number of Tables: "<<resultNum<<std::endl;

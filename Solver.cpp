@@ -95,8 +95,8 @@ bool Solver::solveBackTrack(int* sum)
 	if (isSolved())
 	{
 		*sum+=1;
-		std::cout<<"["<<*sum<<"]"<<std::endl;
-		this->print(std::cout);
+		// std::cout<<"["<<*sum<<"]"<<std::endl;
+		// this->print(std::cout);
 		return true;
 	}
 
