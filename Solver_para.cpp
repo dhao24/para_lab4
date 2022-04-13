@@ -243,11 +243,11 @@ totalNum: return the number of valid tables, always no bigger than 9 if 9*9 tabl
 bool Solver::findNextValid(char* ndata, int* totalNum){
 	int x=0,y=0,num=0;
 	if(getNumOfZero(&x,&y)){
-		for (int i = 1; i <= sudoku_N; i++)
+		for (int val = 1; val <= sudoku_N; val++)
 		{
-			if (isAllowed(i,x,y))
+			if (isAllowed(val,x,y))
 			{
-				*(ndata+num*sudoku_N*sudoku_N+x*sudoku_N+y)=i+'0';
+				*(ndata+num*sudoku_N*sudoku_N+x*sudoku_N+y)=val+'0';
 				getAllData(ndata+num*sudoku_N*sudoku_N);
 				num+=1;
 			}
@@ -271,7 +271,7 @@ void Solver::getAllData(char* pdata)
 	{
 		int x = i % sudoku_N;
 		int y = i / sudoku_N;
-		*(pdata+i)=data[y][i]+'0';
+		*(pdata+i)=data[y][x]+'0';
 	}
 }
 
