@@ -235,7 +235,7 @@ bool Solver::isValid()
 // 	return false;
 // }
 
-bool Solver::solveBackTrack(int* sum, char* data)
+bool Solver::solveBackTrack(int* sum, char* localdata)
 {
 	// Are we there yet?
 	if (isSolved())
@@ -243,7 +243,7 @@ bool Solver::solveBackTrack(int* sum, char* data)
 		*sum+=1;
 		std::cout<<"["<<*sum<<"]"<<std::endl;
 		this->print(std::cout);
-		this->addToResult(data, sum);
+		this->addToResult(localdata, sum);
 		return true;
 	}
 
@@ -267,7 +267,7 @@ bool Solver::solveBackTrack(int* sum, char* data)
 						// Put 'val' into the cell
 						tmpSolver.set(n, x, y);
 						// Try to solve the new table
-						if (tmpSolver.solveBackTrack(sum,data))
+						if (tmpSolver.solveBackTrack(sum,localdata))
 						{
 							// Solution
 							// *this = tmpSolver;
