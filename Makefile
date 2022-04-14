@@ -7,7 +7,7 @@ Solver_para.o: Solver.h Solver_para.cpp
 sudoku: Sudoku.o Solver.o
 	g++ -o sudoku Sudoku.o Solver.o
 
-Sudoku.o: Sudoku_para.cpp
+Sudoku.o: Solver.h Sudoku_para.cpp
 	mpiCC -std=c++11 -g -O0 -c -o Sudoku.o Sudoku_para.cpp
 
 Solver.o: Solver.h Solver.cpp
