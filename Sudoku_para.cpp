@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 		//todo
 		Solver tempSolver(resultData+index*sudoku_N*sudoku_N);
 		// tempSolver.solveBackTrack(&caseSum);
-		tempSolver.solveBackTrack(&local_sum, localResultData);
+		tempSolver.solveBackTrack(&local_sum, &localResultData);
 
 		index+=size;
 	}
