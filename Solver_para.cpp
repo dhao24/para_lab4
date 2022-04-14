@@ -240,7 +240,6 @@ bool Solver::solveBackTrack(int* sum, char** localdata)
 	// Are we there yet?
 	if (isSolved())
 	{
-		*sum+=1;
 		std::cout<<"["<<*sum<<"]"<<std::endl;
 		this->print(std::cout);
 		this->addToResult(localdata, sum);
@@ -361,6 +360,6 @@ bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
 }
 
 bool addMemoryForSolutions(char** data, int n){
-	*data=(char*)realloc(data,(n+1)*sudoku_N*sudoku_N*sizeof(char));
+	*data=(char*)realloc(*data,(n+1)*sudoku_N*sudoku_N*sizeof(char));
 	return true;
 }

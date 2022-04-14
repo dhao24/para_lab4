@@ -27,7 +27,7 @@ public:
 
 	bool isSolved();
 	bool isAllowed(char val, int x, int y);
-	bool solveBackTrack(int* sum);
+	// bool solveBackTrack(int* sum);
 	bool solveBackTrack(int* sum, char** data);
 	bool isValid();
 	int solveBackTrack_all();
