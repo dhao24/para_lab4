@@ -245,10 +245,12 @@ bool Solver::findNextValid(char* ndata, int* totalNum){
 	if(getNumOfZero(&x,&y)){
 		for (int val = 1; val <= sudoku_N; val++)
 		{
-			if (isAllowed(val,x,y))
+			if (isAllowed(val,y,x))
 			{
-				*(ndata+num*sudoku_N*sudoku_N+x*sudoku_N+y)=val+'0';
+				// this->print(std::cout);
+				// std::cout<<"x="<<x<<", y="<<y<<", val="<<val<<std::endl;
 				getAllData(ndata+num*sudoku_N*sudoku_N);
+				*(ndata+num*sudoku_N*sudoku_N+x*sudoku_N+y)=val+'0';
 				num+=1;
 			}
 		}
@@ -289,11 +291,16 @@ bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
 	{
 		int num=0;
 		Solver solver(pdata+i*sudoku_N*sudoku_N);
-		if (solver.findNextValid(ndata+i*sudoku_N*sudoku_N, &num)){
+		if (solver.findNextValid(ndata+total_num*sudoku_N*sudoku_N, &num)){
 			total_num+=num;
 			rtflag=true;
 		}
 	}
 	*nNum=total_num;
 	return rtflag;
+}
+
+bool addValidSolutions(char* data, int* n){
+	data=(char*)realloc(data,sudoku_N*sudoku_N*sizeof(char));
+	return true;
 }

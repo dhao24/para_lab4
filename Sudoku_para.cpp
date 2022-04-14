@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
 	char* preData=(char*)calloc(sudoku_N*sudoku_N*sizedata,sizeof(char));
 	char* nextData=(char*)calloc(sudoku_N*sudoku_N*sizedata,sizeof(char));
 	char* resultData=NULL;
+	char* localResultData=NULL;
 	solver.getAllData(preData);
 	int pNum=1;
 	int nNum=0;
@@ -52,10 +53,10 @@ int main(int argc, char* argv[])
 	{
 		//todo
 		int caseSum=0;
-		Solver tempSolver(resultData+index);
+		Solver tempSolver(resultData+index*sudoku_N*sudoku_N);
 		tempSolver.solveBackTrack(&caseSum);
 
-		index=my_rank+size;
+		index+=size;
 		sum+=caseSum;
 	}
 
@@ -74,7 +75,15 @@ int main(int argc, char* argv[])
 
 		// Test print
 		std::cout<<"Number of Tables: "<<resultNum<<std::endl;
+		// for (int k = 0; k < resultNum; k++){
+		// 	for (int i = k*sudoku_N*sudoku_N; i < k*sudoku_N*sudoku_N+sudoku_N; i++){
+		// 		std::cout<<*(resultData+i)<<" ";
+		// 	}
+		// 	std::cout<<std::endl;
+		// }
 	}
+	std::cout<<"thread:"<<my_rank<<", Number of Solutions: "<<sum<<std::endl;
+
 	free(preData);
 	free(nextData);
 	MPI_Finalize();

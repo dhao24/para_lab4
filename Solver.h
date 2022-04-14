@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <stdlib.h>
 
 #define sudoku_N 9
 #define sudoku_n 3
@@ -42,4 +43,5 @@ private:
 };
 
 bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum);
+bool addValidSolutions(char* data, int* n);
 
