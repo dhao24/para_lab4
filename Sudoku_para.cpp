@@ -47,17 +47,16 @@ int main(int argc, char* argv[])
 		resultNum=pNum;
 	}
 
-	int sum=0;
+	int local_sum=0;
 	int index=my_rank;
 	while (index<resultNum)
 	{
 		//todo
-		int caseSum=0;
 		Solver tempSolver(resultData+index*sudoku_N*sudoku_N);
-		tempSolver.solveBackTrack(&caseSum);
+		// tempSolver.solveBackTrack(&caseSum);
+		tempSolver.solveBackTrack(&local_sum, localResultData);
 
 		index+=size;
-		sum+=caseSum;
 	}
 
 	if (my_rank==RootRank)
@@ -65,13 +64,12 @@ int main(int argc, char* argv[])
 		std::cout << "Problem:" << std::endl << std::endl;
 		solver.print(std::cout);
 		std::cout << std::endl << "-----------------------------------------" << std::endl;
-	// }
 	
 		std::cout << "Solution:" << std::endl << std::endl;;
 		// int sum=0;
-		// solver.solveBackTrack(&sum);
+		// solver.solveBackTrack(&local_sum);
 		// solver.print(std::cout);
-		// std::cout<<"Number of solutions are "<<sum<<std::endl;
+		// std::cout<<"Number of solutions are "<<local_sum<<std::endl;
 
 		// Test print
 		std::cout<<"Number of Tables: "<<resultNum<<std::endl;
@@ -82,10 +80,17 @@ int main(int argc, char* argv[])
 		// 	std::cout<<std::endl;
 		// }
 	}
-	std::cout<<"thread:"<<my_rank<<", Number of Solutions: "<<sum<<std::endl;
+	std::cout<<"thread:"<<my_rank<<", Number of Solutions: "<<local_sum<<std::endl;
+	for (int k = 0; k < local_sum; k++){
+		for (int i = k*sudoku_N*sudoku_N; i < k*sudoku_N*sudoku_N+sudoku_N; i++){
+			std::cout<<*(localResultData+i)<<" ";
+		}
+		std::cout<<std::endl;
+	}
 
 	free(preData);
 	free(nextData);
+	free(localResultData);
 	MPI_Finalize();
     return 0;
 }
