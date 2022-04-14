@@ -28,6 +28,7 @@ public:
 	bool isSolved();
 	bool isAllowed(char val, int x, int y);
 	bool solveBackTrack(int* sum);
+	bool solveBackTrack(int* sum, char* data);
 	bool isValid();
 	int solveBackTrack_all();
 	
@@ -36,6 +37,8 @@ public:
 	void getAllData(char* pdata);
 
 	bool findNextValid(char* ndata, int* nNum);
+	bool addToResult(char* data, int* n);
+
 	void set(char val, int x, int y);
 
 private:
@@ -43,5 +46,5 @@ private:
 };
 
 bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum);
-bool addValidSolutions(char* data, int* n);
+bool addMemoryForSolutions(char* data, int n);
 

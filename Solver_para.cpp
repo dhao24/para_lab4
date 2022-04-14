@@ -235,6 +235,60 @@ bool Solver::solveBackTrack(int* sum)
 	return false;
 }
 
+bool Solver::solveBackTrack(int* sum, char* data)
+{
+	// Are we there yet?
+	if (isSolved())
+	{
+		*sum+=1;
+		std::cout<<"["<<*sum<<"]"<<std::endl;
+		this->print(std::cout);
+		this->addToResult(data, sum);
+		return true;
+	}
+
+	// Find an empty cell
+	for (int y = 0; y < sudoku_N; ++y)
+	{
+		for (int x = 0; x < sudoku_N; ++x)
+		{
+			// Is it empty?
+			if (data[y][x] == 0)
+			{
+				// Find an appropriate 'val'
+				int success_flag=0;
+				for (int n = 1; n <= sudoku_N; ++n)
+				{
+					// Is 'val' allowed in this cell?
+					if (isAllowed(n, x, y))
+					{
+						// Copy the table
+						Solver tmpSolver(this);
+						// Put 'val' into the cell
+						tmpSolver.set(n, x, y);
+						// Try to solve the new table
+						if (tmpSolver.solveBackTrack(sum))
+						{
+							// Solution
+							// *this = tmpSolver;
+							success_flag+=1;
+						}
+					}
+				}
+				if (success_flag)
+				{
+					return true;
+				}
+				
+			}
+			// Cannot solve this table, back track to a previous state
+			if (data[y][x] == 0) return false;
+		}
+	}
+
+	return false;
+}
+
 /* this function will find all valid tables of the next zero element
 return true if there is a next zero
 pdata: store the valid tables
@@ -277,6 +331,12 @@ void Solver::getAllData(char* pdata)
 	}
 }
 
+bool Solver::addToResult(char* data, int* n){
+	addMemoryForSolutions(data,*n);
+	this->getAllData(data+(*n)*sudoku_N*sudoku_N);
+	*n+=1;
+}
+
 /* from the pdata status find the next valid
 return false if no valid elements can be found
 pdata: previous array of tables
@@ -300,11 +360,16 @@ bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
 	return rtflag;
 }
 
+<<<<<<< HEAD
 bool addValidSolutions(char* data, int* n){
 <<<<<<< HEAD
 	data=(char*)
 =======
 	data=(char*)realloc(data,(*n+1)*sudoku_N*sudoku_N*sizeof(char));
 >>>>>>> 1b56bff7d14fc962307eb111a8ea559d8261ac09
+=======
+bool addMemoryForSolutions(char* data, int n){
+	data=(char*)realloc(data,(n+1)*sudoku_N*sudoku_N*sizeof(char));
+>>>>>>> 30191bccb628898e1d6557a07c5a411a7b1f5696
 	return true;
 }
