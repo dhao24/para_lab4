@@ -8,6 +8,14 @@
 
 #define RootRank 0
 
+void exScan_array(int* arr_out, int* arr_in, int n){
+	arr_out[0]=arr_in[0];
+	for (int i = 1; i < n; i++)
+	{
+		arr_out[i]=arr_out[i-1]+arr_in[i-1];
+	}
+}
+
 int main(int argc, char* argv[])
 {
 	MPI_Init(&argc, &argv);
@@ -47,7 +55,12 @@ int main(int argc, char* argv[])
 		resultNum=pNum;
 	}
 
+	int *globe_num=(int*)calloc(size, sizeof(int));
+	int *globe_offset=(int*)calloc(size, sizeof(int));
+	char* gatherData=NULL;
+	int global_sum=0;
 	int local_sum=0;
+	int total_sum=0;
 	int index=my_rank;
 	while (index<resultNum)
 	{
@@ -59,6 +72,19 @@ int main(int argc, char* argv[])
 		index+=size;
 	}
 
+	MPI_Gather(&local_sum,1,MPI_INT,globe_num,1,MPI_INT,RootRank,MPI_COMM_WORLD);
+	if (my_rank==RootRank)
+	{
+		exScan_array(globe_offset,globe_num,size);
+		total_sum=globe_num[size-1]+globe_offset[size-1];
+		gatherData=(char*)calloc(total_sum*sudoku_N*sudoku_N,sizeof(char));
+		MPI_Gatherv(localResultData,local_sum*sudoku_N*sudoku_N,MPI_CHAR,gatherData,globe_num,globe_offset,MPI_CHAR,RootRank,MPI_COMM_WORLD);
+	}else
+	{
+		MPI_Gatherv(localResultData,local_sum*sudoku_N*sudoku_N,MPI_CHAR,NULL,NULL,NULL,MPI_CHAR,RootRank,MPI_COMM_WORLD);
+	}
+	
+	
 	if (my_rank==RootRank)
 	{
 		std::cout << "Problem:" << std::endl << std::endl;
@@ -66,31 +92,30 @@ int main(int argc, char* argv[])
 		std::cout << std::endl << "-----------------------------------------" << std::endl;
 	
 		std::cout << "Solution:" << std::endl << std::endl;;
-		// int sum=0;
-		// solver.solveBackTrack(&local_sum);
-		// solver.print(std::cout);
-		// std::cout<<"Number of solutions are "<<local_sum<<std::endl;
-
-		// Test print
+		
 		std::cout<<"Number of Tables: "<<resultNum<<std::endl;
-		// for (int k = 0; k < resultNum; k++){
-		// 	for (int i = k*sudoku_N*sudoku_N; i < k*sudoku_N*sudoku_N+sudoku_N; i++){
-		// 		std::cout<<*(resultData+i)<<" ";
-		// 	}
-		// 	std::cout<<std::endl;
-		// }
-	}
-	std::cout<<"thread:"<<my_rank<<", Number of Solutions: "<<local_sum<<std::endl;
-	for (int k = 0; k < local_sum; k++){
-		for (int i = k*sudoku_N*sudoku_N; i < k*sudoku_N*sudoku_N+sudoku_N; i++){
-			std::cout<<*(localResultData+i)<<" ";
+
+		for (int i = 0; i < total_sum; i++)
+		{
+			Solver resultSolver(gatherData+i*sudoku_N*sudoku_N);
+			std::cout<<"["<<i<<"]"<<std::endl;
+			resultSolver.print(std::cout);
 		}
-		std::cout<<std::endl;
 	}
+	// std::cout<<"thread:"<<my_rank<<", Number of Solutions: "<<local_sum<<std::endl;
+	// for (int k = 0; k < local_sum; k++){
+	// 	for (int i = k*sudoku_N*sudoku_N; i < k*sudoku_N*sudoku_N+sudoku_N; i++){
+	// 		std::cout<<*(localResultData+i)<<" ";
+	// 	}
+	// 	std::cout<<std::endl;
+	// }
 
 	free(preData);
 	free(nextData);
 	free(localResultData);
+	free(globe_num);
+	free(globe_offset);
+	free(gatherData);
 	MPI_Finalize();
     return 0;
 }
