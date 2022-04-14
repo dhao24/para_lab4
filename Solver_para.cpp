@@ -360,16 +360,7 @@ bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
 	return rtflag;
 }
 
-<<<<<<< HEAD
-bool addValidSolutions(char* data, int* n){
-<<<<<<< HEAD
-	data=(char*)
-=======
-	data=(char*)realloc(data,(*n+1)*sudoku_N*sudoku_N*sizeof(char));
->>>>>>> 1b56bff7d14fc962307eb111a8ea559d8261ac09
-=======
 bool addMemoryForSolutions(char* data, int n){
 	data=(char*)realloc(data,(n+1)*sudoku_N*sudoku_N*sizeof(char));
->>>>>>> 30191bccb628898e1d6557a07c5a411a7b1f5696
 	return true;
 }
