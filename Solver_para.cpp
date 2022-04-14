@@ -235,7 +235,7 @@ bool Solver::isValid()
 // 	return false;
 // }
 
-bool Solver::solveBackTrack(int* sum, char* localdata)
+bool Solver::solveBackTrack(int* sum, char** localdata)
 {
 	// Are we there yet?
 	if (isSolved())
@@ -331,9 +331,9 @@ void Solver::getAllData(char* pdata)
 	}
 }
 
-bool Solver::addToResult(char* data, int* n){
+bool Solver::addToResult(char** data, int* n){
 	addMemoryForSolutions(data,*n);
-	this->getAllData(data+(*n)*sudoku_N*sudoku_N);
+	this->getAllData(*data+(*n)*sudoku_N*sudoku_N);
 	*n+=1;
 }
 
@@ -360,7 +360,7 @@ bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
 	return rtflag;
 }
 
-bool addMemoryForSolutions(char* data, int n){
-	data=(char*)realloc(data,(n+1)*sudoku_N*sudoku_N*sizeof(char));
+bool addMemoryForSolutions(char** data, int n){
+	*data=(char*)realloc(data,(n+1)*sudoku_N*sudoku_N*sizeof(char));
 	return true;
 }
