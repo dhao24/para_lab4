@@ -182,58 +182,58 @@ bool Solver::isValid()
     return true;
 }
 
-bool Solver::solveBackTrack(int* sum)
-{
-	// Are we there yet?
-	if (isSolved())
-	{
-		*sum+=1;
-		std::cout<<"["<<*sum<<"]"<<std::endl;
-		this->print(std::cout);
-		return true;
-	}
+// bool Solver::solveBackTrack(int* sum)
+// {
+// 	// Are we there yet?
+// 	if (isSolved())
+// 	{
+// 		*sum+=1;
+// 		std::cout<<"["<<*sum<<"]"<<std::endl;
+// 		this->print(std::cout);
+// 		return true;
+// 	}
 
-	// Find an empty cell
-	for (int y = 0; y < sudoku_N; ++y)
-	{
-		for (int x = 0; x < sudoku_N; ++x)
-		{
-			// Is it empty?
-			if (data[y][x] == 0)
-			{
-				// Find an appropriate 'val'
-				int success_flag=0;
-				for (int n = 1; n <= sudoku_N; ++n)
-				{
-					// Is 'val' allowed in this cell?
-					if (isAllowed(n, x, y))
-					{
-						// Copy the table
-						Solver tmpSolver(this);
-						// Put 'val' into the cell
-						tmpSolver.set(n, x, y);
-						// Try to solve the new table
-						if (tmpSolver.solveBackTrack(sum))
-						{
-							// Solution
-							// *this = tmpSolver;
-							success_flag+=1;
-						}
-					}
-				}
-				if (success_flag)
-				{
-					return true;
-				}
+// 	// Find an empty cell
+// 	for (int y = 0; y < sudoku_N; ++y)
+// 	{
+// 		for (int x = 0; x < sudoku_N; ++x)
+// 		{
+// 			// Is it empty?
+// 			if (data[y][x] == 0)
+// 			{
+// 				// Find an appropriate 'val'
+// 				int success_flag=0;
+// 				for (int n = 1; n <= sudoku_N; ++n)
+// 				{
+// 					// Is 'val' allowed in this cell?
+// 					if (isAllowed(n, x, y))
+// 					{
+// 						// Copy the table
+// 						Solver tmpSolver(this);
+// 						// Put 'val' into the cell
+// 						tmpSolver.set(n, x, y);
+// 						// Try to solve the new table
+// 						if (tmpSolver.solveBackTrack(sum))
+// 						{
+// 							// Solution
+// 							// *this = tmpSolver;
+// 							success_flag+=1;
+// 						}
+// 					}
+// 				}
+// 				if (success_flag)
+// 				{
+// 					return true;
+// 				}
 				
-			}
-			// Cannot solve this table, back track to a previous state
-			if (data[y][x] == 0) return false;
-		}
-	}
+// 			}
+// 			// Cannot solve this table, back track to a previous state
+// 			if (data[y][x] == 0) return false;
+// 		}
+// 	}
 
-	return false;
-}
+// 	return false;
+// }
 
 bool Solver::solveBackTrack(int* sum, char* data)
 {
@@ -267,7 +267,7 @@ bool Solver::solveBackTrack(int* sum, char* data)
 						// Put 'val' into the cell
 						tmpSolver.set(n, x, y);
 						// Try to solve the new table
-						if (tmpSolver.solveBackTrack(sum))
+						if (tmpSolver.solveBackTrack(sum,data))
 						{
 							// Solution
 							// *this = tmpSolver;
