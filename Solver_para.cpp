@@ -301,6 +301,10 @@ bool findNextTables(char* pdata, int pNum, char* ndata, int* nNum){
 }
 
 bool addValidSolutions(char* data, int* n){
+<<<<<<< HEAD
 	data=(char*)
+=======
+	data=(char*)realloc(data,(*n+1)*sudoku_N*sudoku_N*sizeof(char));
+>>>>>>> 1b56bff7d14fc962307eb111a8ea559d8261ac09
 	return true;
 }
