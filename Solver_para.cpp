@@ -240,8 +240,8 @@ bool Solver::solveBackTrack(int* sum, char** localdata)
 	// Are we there yet?
 	if (isSolved())
 	{
-		std::cout<<"["<<*sum<<"]"<<std::endl;
-		this->print(std::cout);
+		// std::cout<<"["<<*sum<<"]"<<std::endl;
+		// this->print(std::cout);
 		this->addToResult(localdata, sum);
 		return true;
 	}

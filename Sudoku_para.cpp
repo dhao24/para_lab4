@@ -87,16 +87,16 @@ int main(int argc, char* argv[])
 		}
 		
 		gatherData=(char*)calloc(total_sum*sudoku_N*sudoku_N,sizeof(char));
-		for (int i = 0; i < size; i++)
-		{
-			std::cout<<globe_num[i]<<" ";
-		}
-			std::cout<<std::endl;
-		for (int i = 0; i < size; i++)
-		{
-			std::cout<<globe_offset[i]<<" ";
-		}
-			std::cout<<std::endl;	
+		// for (int i = 0; i < size; i++)
+		// {
+		// 	std::cout<<globe_num[i]<<" ";
+		// }
+		// 	std::cout<<std::endl;
+		// for (int i = 0; i < size; i++)
+		// {
+		// 	std::cout<<globe_offset[i]<<" ";
+		// }
+		// 	std::cout<<std::endl;	
 		
 		MPI_Gatherv(localResultData,local_sum*sudoku_N*sudoku_N,MPI_CHAR,gatherData,globe_num,globe_offset,MPI_CHAR,RootRank,MPI_COMM_WORLD);
 	}else
