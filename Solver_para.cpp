@@ -276,6 +276,7 @@ bool Solver::addToResult(char** data, int* n){
 	addMemoryForSolutions(data,*n);
 	this->getAllData(*data+(*n)*sudoku_N*sudoku_N);
 	*n+=1;
+	return true;
 }
 
 /* from the pdata status find the next valid
