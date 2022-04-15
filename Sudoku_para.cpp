@@ -9,7 +9,7 @@
 #define RootRank 0
 
 void exScan_array(int* arr_out, int* arr_in, int n){
-	arr_out[0]=arr_in[0];
+	arr_out[0]=0;
 	for (int i = 1; i < n; i++)
 	{
 		arr_out[i]=arr_out[i-1]+arr_in[i-1];
@@ -77,7 +77,24 @@ int main(int argc, char* argv[])
 	{
 		exScan_array(globe_offset,globe_num,size);
 		total_sum=globe_num[size-1]+globe_offset[size-1];
+		for (int i = 0; i < size; i++)
+		{
+			globe_num[i]*=sudoku_N*sudoku_N;
+			globe_offset[i]*=sudoku_N*sudoku_N;
+		}
+		
 		gatherData=(char*)calloc(total_sum*sudoku_N*sudoku_N,sizeof(char));
+		for (int i = 0; i < size; i++)
+		{
+			std::cout<<globe_num[i]<<" ";
+		}
+			std::cout<<std::endl;
+		for (int i = 0; i < size; i++)
+		{
+			std::cout<<globe_offset[i]<<" ";
+		}
+			std::cout<<std::endl;	
+		
 		MPI_Gatherv(localResultData,local_sum*sudoku_N*sudoku_N,MPI_CHAR,gatherData,globe_num,globe_offset,MPI_CHAR,RootRank,MPI_COMM_WORLD);
 	}else
 	{
@@ -93,7 +110,7 @@ int main(int argc, char* argv[])
 	
 		std::cout << "Solution:" << std::endl << std::endl;;
 		
-		std::cout<<"Number of Tables: "<<resultNum<<std::endl;
+		// std::cout<<"Number of Tables: "<<resultNum<<std::endl;
 
 		for (int i = 0; i < total_sum; i++)
 		{
@@ -102,13 +119,6 @@ int main(int argc, char* argv[])
 			resultSolver.print(std::cout);
 		}
 	}
-	// std::cout<<"thread:"<<my_rank<<", Number of Solutions: "<<local_sum<<std::endl;
-	// for (int k = 0; k < local_sum; k++){
-	// 	for (int i = k*sudoku_N*sudoku_N; i < k*sudoku_N*sudoku_N+sudoku_N; i++){
-	// 		std::cout<<*(localResultData+i)<<" ";
-	// 	}
-	// 	std::cout<<std::endl;
-	// }
 
 	free(preData);
 	free(nextData);
