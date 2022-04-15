@@ -38,7 +38,6 @@ Solver::Solver(const Solver * init)
 	}
 }
 
-
 Solver::~Solver()
 {
 }
@@ -182,66 +181,11 @@ bool Solver::isValid()
     return true;
 }
 
-// bool Solver::solveBackTrack(int* sum)
-// {
-// 	// Are we there yet?
-// 	if (isSolved())
-// 	{
-// 		*sum+=1;
-// 		std::cout<<"["<<*sum<<"]"<<std::endl;
-// 		this->print(std::cout);
-// 		return true;
-// 	}
-
-// 	// Find an empty cell
-// 	for (int y = 0; y < sudoku_N; ++y)
-// 	{
-// 		for (int x = 0; x < sudoku_N; ++x)
-// 		{
-// 			// Is it empty?
-// 			if (data[y][x] == 0)
-// 			{
-// 				// Find an appropriate 'val'
-// 				int success_flag=0;
-// 				for (int n = 1; n <= sudoku_N; ++n)
-// 				{
-// 					// Is 'val' allowed in this cell?
-// 					if (isAllowed(n, x, y))
-// 					{
-// 						// Copy the table
-// 						Solver tmpSolver(this);
-// 						// Put 'val' into the cell
-// 						tmpSolver.set(n, x, y);
-// 						// Try to solve the new table
-// 						if (tmpSolver.solveBackTrack(sum))
-// 						{
-// 							// Solution
-// 							// *this = tmpSolver;
-// 							success_flag+=1;
-// 						}
-// 					}
-// 				}
-// 				if (success_flag)
-// 				{
-// 					return true;
-// 				}
-				
-// 			}
-// 			// Cannot solve this table, back track to a previous state
-// 			if (data[y][x] == 0) return false;
-// 		}
-// 	}
-
-// 	return false;
-// }
-
 bool Solver::solveBackTrack(int* sum, char** localdata)
 {
 	// Are we there yet?
 	if (isSolved())
 	{
-		// std::cout<<"["<<*sum<<"]"<<std::endl;
-		// this->print(std::cout);
 		this->addToResult(localdata, sum);
 		return true;
 	}
@@ -300,8 +244,6 @@ bool Solver::findNextValid(char* ndata, int* totalNum){
 		{
 			if (isAllowed(val,y,x))
 			{
-				// this->print(std::cout);
-				// std::cout<<"x="<<x<<", y="<<y<<", val="<<val<<std::endl;
 				getAllData(ndata+num*sudoku_N*sudoku_N);
 				*(ndata+num*sudoku_N*sudoku_N+x*sudoku_N+y)=val+'0';
 				num+=1;

@@ -67,9 +67,7 @@ int main(int argc, char* argv[])
 	int index=my_rank;
 	while (index<resultNum)
 	{
-		//todo
 		Solver tempSolver(resultData+index*sudoku_N*sudoku_N);
-		// tempSolver.solveBackTrack(&caseSum);
 		tempSolver.solveBackTrack(&local_sum, &localResultData);
 
 		index+=size;
@@ -87,16 +85,6 @@ int main(int argc, char* argv[])
 		}
 		
 		gatherData=(char*)calloc(total_sum*sudoku_N*sudoku_N,sizeof(char));
-		// for (int i = 0; i < size; i++)
-		// {
-		// 	std::cout<<globe_num[i]<<" ";
-		// }
-		// 	std::cout<<std::endl;
-		// for (int i = 0; i < size; i++)
-		// {
-		// 	std::cout<<globe_offset[i]<<" ";
-		// }
-		// 	std::cout<<std::endl;	
 		
 		MPI_Gatherv(localResultData,local_sum*sudoku_N*sudoku_N,MPI_CHAR,gatherData,globe_num,globe_offset,MPI_CHAR,RootRank,MPI_COMM_WORLD);
 	}else
@@ -115,8 +103,6 @@ int main(int argc, char* argv[])
 	
 		std::cout << "Solution:" << std::endl << std::endl;;
 		
-		// std::cout<<"Number of Tables: "<<resultNum<<std::endl;
-
 		for (int i = 0; i < total_sum; i++)
 		{
 			Solver resultSolver(gatherData+i*sudoku_N*sudoku_N);
