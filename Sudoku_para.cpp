@@ -35,6 +35,9 @@ int main(int argc, char* argv[])
 	int pNum=1;
 	int nNum=0;
 	int resultNum=0;
+	double start_time, end_time;
+
+	start_time = MPI_Wtime();
 
 	for (int i = 0; i < serial_level; i++)
 	{
@@ -101,9 +104,11 @@ int main(int argc, char* argv[])
 		MPI_Gatherv(localResultData,local_sum*sudoku_N*sudoku_N,MPI_CHAR,NULL,NULL,NULL,MPI_CHAR,RootRank,MPI_COMM_WORLD);
 	}
 	
+	end_time = MPI_Wtime();
 	
 	if (my_rank==RootRank)
 	{
+		std::cout << "Time is:" << end_time-start_time << std::endl;
 		std::cout << "Problem:" << std::endl << std::endl;
 		solver.print(std::cout);
 		std::cout << std::endl << "-----------------------------------------" << std::endl;
