@@ -21,8 +21,13 @@ int main(int argc, char* argv[])
 	MPI_Init(&argc, &argv);
     int size;
     int my_rank;
+	char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int processor_name_len;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Get_processor_name(processor_name, &processor_name_len);
+	printf("Hello from process %03d out of %03d, hostname %s\n", 
+        my_rank, size, processor_name);
 	// Minimal Soduku tables with 17 elements: http://staffhome.ecm.uwa.edu.au/~00013890/sudokumin.php
 	Solver solver("000801000000000043500000000000070800020030000000000100600000075003400000000200600");
 	
@@ -35,7 +40,7 @@ int main(int argc, char* argv[])
 	int pNum=1;
 	int nNum=0;
 	int resultNum=0;
-	double start_time, end_time;
+	double start_time, end_time, start_time2, start_time3;
 
 	start_time = MPI_Wtime();
 
@@ -65,13 +70,26 @@ int main(int argc, char* argv[])
 	int local_sum=0;
 	int total_sum=0;
 	int index=my_rank;
+	start_time2 = MPI_Wtime();
+
 	while (index<resultNum)
 	{
+		start_time3 = MPI_Wtime();
+
 		Solver tempSolver(resultData+index*sudoku_N*sudoku_N);
 		tempSolver.solveBackTrack(&local_sum, &localResultData);
-
+		end_time=MPI_Wtime();
+		double timeperindex=end_time-start_time3;
+		std::cout << "Rank #"<<my_rank<< " Index:" << index << " time:"<<timeperindex<<std::endl;
 		index+=size;
 	}
+
+	end_time = MPI_Wtime();
+	double timesum1[20]={0};
+	double time1=end_time-start_time2;
+	std::cout << "Rank #"<<my_rank<< " Time0 is:" << time1 << std::endl;
+
+	MPI_Gather(&time1,1,MPI_DOUBLE,timesum1,1,MPI_DOUBLE,RootRank,MPI_COMM_WORLD);
 
 	MPI_Gather(&local_sum,1,MPI_INT,globe_num,1,MPI_INT,RootRank,MPI_COMM_WORLD);
 	if (my_rank==RootRank)
@@ -94,9 +112,16 @@ int main(int argc, char* argv[])
 	
 	end_time = MPI_Wtime();
 	
+		std::cout << "Rank #"<<my_rank<< " Time is:" << end_time-start_time << std::endl;
 	if (my_rank==RootRank)
 	{
-		std::cout << "Time is:" << end_time-start_time << std::endl;
+		double time1sum=0;
+		for (size_t i = 0; i < 20; i++)
+		{
+			time1sum+=timesum1[i];
+		}
+		
+		std::cout << "Rank #"<<my_rank<< " Total Time is:" << time1sum << std::endl;
 		std::cout << "Problem:" << std::endl << std::endl;
 		solver.print(std::cout);
 		std::cout << std::endl << "-----------------------------------------" << std::endl;
